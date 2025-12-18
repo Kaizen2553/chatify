@@ -3,6 +3,9 @@ import express from "express";
 import bcrypt from 'bcryptjs';
 import User from "../models/user.model.js";
 import { generateToken } from "../lib/utils.js";
+import cloudinary from '../lib/cloudinary.js'
+
+
 
 export const signup = async (req,res)=>{
     const {fullName,email,password} = req.body;
@@ -103,3 +106,36 @@ export const login = async (req,res)=>{
 
     
 }
+
+export const update = async (req,res)=>{
+   
+    try{
+
+        const user = await User.findById(req.userId);
+        if(!user){
+            return res.status(404).json({message:"user not found"});
+        }
+        const {profileImg}  = req.body;
+        if(!profileImg){
+            return res.status(400).json({message:"profile pic is required"});
+        }
+
+        const uploadResponse = await cloudinary.uploader.upload(profileImg);
+        user.profileImg = uploadResponse.secure_url;
+        await user.save();
+
+        res.status(200).json({message:"profile update successfully",user});
+        
+    }catch(error){
+        console.log("error in update profile",error);
+        return res.status(500).json({message:"internal server error"});
+    }
+    
+    //find if user still exists or not in the data base
+
+
+    
+
+}
+
+
