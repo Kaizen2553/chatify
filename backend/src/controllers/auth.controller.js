@@ -35,8 +35,8 @@ export const signup = async (req,res)=>{
         })
 
         if(newUser){
-            generateToken(newUser._id,res);
-            await newUser.save();
+            const savedUser = await newUser.save();
+            generateToken(savedUser._id,res);
             res.status(201).json({
                 _id:newUser._id,
                 fullName:fullName,
@@ -54,10 +54,52 @@ export const signup = async (req,res)=>{
 }
 
 
-export const signout = (req,res)=>{
-    res.send("signout endpoint");
+export const signout = (_,res)=>{
+    res.cookie(
+        "jwt",
+        "",
+        {maxAge:0},
+    );
+    return res.status(200).json({message:"user logged out"});
 }
 
-export const login = (req,res)=>{
-    res.send("login");
+export const login = async (req,res)=>{
+
+    try{
+        
+        const {email,password} = req.body;
+    
+        if(!email||!password){
+            res.status(400).json({message:"fill all the fields"});
+            return;
+        }
+    
+        const validUser = await User.findOne({email});
+        if(!validUser){
+            res.status(400).json({message:"invalid credentials"});
+            return;
+        }
+    
+        const hashedPassword = validUser.password;
+    
+        const match = await bcrypt.compare(password,hashedPassword);
+    
+        if(match){
+            generateToken(validUser._id,res);
+            res.status(200).json(validUser);
+            return ;
+        }else{
+            res.status(400).json({message:"invalid credentials"});
+            return;
+        }
+    
+
+    }catch(error){
+        res.status(500).json({message:"internal server error"});
+        console.log("error in login route",error.message());
+        return;
+    }  
+
+
+    
 }
