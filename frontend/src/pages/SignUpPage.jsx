@@ -165,6 +165,14 @@ function SignUpPage() {
                 </div>
               </div>
             </div>
+             <div className="flex items-center justify-center md:flex md:w-1/2 bg-[#05070b] ">
+              <lord-icon
+                src="https://cdn.lordicon.com/jdgfsfzr.json"
+                trigger="hover"
+                stroke="bold"
+                style={{width:"400px",height:"400px"}}
+              ></lord-icon>
+            </div>
           </div>
         </BorderAnimatedContainer>
       </div>
