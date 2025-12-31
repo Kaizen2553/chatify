@@ -4,9 +4,9 @@ import { getAllContacts , getMessagesById , sendMessage , getChatPartners } from
 const router = express.Router();
 router.use(protectRoute);
 
-router.get('/contacts',getAllContacts);
-router.get('/chats',getChatPartners);
-router.get('/:id',getMessagesById);
-router.post('/send/:id',sendMessage);
+router.get('/contacts',protectRoute,getAllContacts);
+router.get('/chats',protectRoute,getChatPartners);
+router.get('/:id',protectRoute,getMessagesById);
+router.post('/send/:id',protectRoute,sendMessage);
 
 export default router;

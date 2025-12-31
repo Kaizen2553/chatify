@@ -99,7 +99,7 @@ export const login = async (req,res)=>{
 
     }catch(error){
         res.status(500).json({message:"internal server error"});
-        console.log("error in login route",error.message());
+        console.log("error in login route",error.message);
         return;
     }  
 
@@ -124,7 +124,7 @@ export const update = async (req,res)=>{
         user.profileImg = uploadResponse.secure_url;
         await user.save();
 
-        res.status(200).json({message:"profile update successfully",user});
+        res.status(200).json(user);
         
     }catch(error){
         console.log("error in update profile",error);

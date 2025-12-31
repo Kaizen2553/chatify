@@ -93,7 +93,7 @@ export const getChatPartners = async(req,res)=>{
         });
 
         const chatPartnerIds =[...new Set(chatUsers.map((msg)=>{
-           return (msg.senderId.toString()===req.userId)?msg.receiverId.toString():msg.senderId.toString();
+           return (msg.senderId.equals(req.userId))?msg.receiverId.toString():msg.senderId.toString();
         }))];
 
 
